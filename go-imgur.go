@@ -68,7 +68,7 @@ func main() {
 }
 
 func GetEnvVar() string {
-	env := os.Getenv("IMGUR_SECRET")
+	env := os.Getenv("IMGUR_CLIENT_ID")
 
 	if env == "" {
 		return ""
