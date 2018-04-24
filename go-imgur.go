@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-var clientID = GetEnvVar()
+var clientID = getEnvVar()
 var imgur = "https://api.imgur.com/3/image"
 
 type ImgurResponse struct {
@@ -67,7 +67,7 @@ func main() {
 	fmt.Println("Deletion Link: http://imgur.com/delete/" + imgurResponse.Data.Deletehash)
 }
 
-func GetEnvVar() string {
+func getEnvVar() string {
 	env := os.Getenv("IMGUR_CLIENT_ID")
 
 	if env == "" {
