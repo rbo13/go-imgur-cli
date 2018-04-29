@@ -11,9 +11,9 @@ Go-IMGUR-CLI is a CLI based uploader to imgur.
 Go-IMGUR-CLI requires [Golang Runtime](https://golang.org/) to run.
 
 Assuming you have the correct path specified in your $GOPATH.
-Clone the repo: 
 
-`git@github.com:whaangbuu/go-imgur-cli.git`
+
+Clone the repo: `git@github.com:whaangbuu/go-imgur-cli.git`
 
 ```sh
 $ cd go-imgur-cli
