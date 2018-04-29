@@ -8,11 +8,15 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"strings"
 )
 
 var clientID = getEnvVar()
-var imgur = "https://api.imgur.com/3/image"
+
+const (
+	imgur = "https://api.imgur.com/3/image"
+)
 
 type ImgurResponse struct {
 	Data    ImageData `json:"data"`
@@ -43,10 +47,13 @@ type ImageData struct {
 func main() {
 	fileName := os.Args[1]
 	fileEncoded, err := ioutil.ReadFile(fileName)
+
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+	// uploader.NewUpload(fileName)
+
 	parameters := url.Values{"image": {base64.StdEncoding.EncodeToString(fileEncoded)}}
 	req, err := http.NewRequest("POST", imgur, strings.NewReader(parameters.Encode()))
 	if err != nil {
@@ -63,6 +70,8 @@ func main() {
 
 	var imgurResponse ImgurResponse
 	json.NewDecoder(r.Body).Decode(&imgurResponse)
+	copyToClipboard(imgurResponse.Data.Link)
+	fmt.Println("Successfully copied to clipboard!")
 	fmt.Println("Image Link: " + imgurResponse.Data.Link)
 	fmt.Println("Deletion Link: http://imgur.com/delete/" + imgurResponse.Data.Deletehash)
 }
@@ -75,4 +84,27 @@ func getEnvVar() string {
 	}
 
 	return env
+}
+
+func getCopyCommand() *exec.Cmd {
+	return exec.Command("pbcopy")
+}
+
+func copyToClipboard(text string) error {
+	copyCmd := getCopyCommand()
+	in, err := copyCmd.StdinPipe()
+	if err != nil {
+		return err
+	}
+
+	if err := copyCmd.Start(); err != nil {
+		return err
+	}
+	if _, err := in.Write([]byte(text)); err != nil {
+		return err
+	}
+	if err := in.Close(); err != nil {
+		return err
+	}
+	return copyCmd.Wait()
 }
