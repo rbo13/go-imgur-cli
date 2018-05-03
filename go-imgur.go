@@ -10,6 +10,9 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
+
+	spin "github.com/tj/go-spin"
 )
 
 var clientID = getEnvVar()
@@ -47,6 +50,7 @@ type ImageData struct {
 func main() {
 	fileName := os.Args[1]
 	fileEncoded, err := ioutil.ReadFile(fileName)
+	s := spin.New()
 
 	if err != nil {
 		fmt.Println(err)
@@ -68,10 +72,12 @@ func main() {
 		os.Exit(1)
 	}
 
+	showSpinner(s, "Box1", spin.Box1)
+
 	var imgurResponse ImgurResponse
 	json.NewDecoder(r.Body).Decode(&imgurResponse)
 	copyToClipboard(imgurResponse.Data.Link)
-	fmt.Printf("`%s` successfully copied to clipboard! \n", imgurResponse.Data.Link)
+	fmt.Printf("\n`%s` has been copied to clipboard! \n", imgurResponse.Data.Link)
 	fmt.Println("Deletion Link: http://imgur.com/delete/" + imgurResponse.Data.Deletehash)
 }
 
@@ -106,4 +112,13 @@ func copyToClipboard(text string) error {
 		return err
 	}
 	return copyCmd.Wait()
+}
+
+func showSpinner(s *spin.Spinner, name, frames string) {
+	s.Set(frames)
+	fmt.Printf("\n\n  %s: %s\n\n", name, frames)
+	for i := 0; i < 30; i++ {
+		fmt.Printf("\r  \033[36mcomputing\033[m %s ", s.Next())
+		time.Sleep(100 * time.Millisecond)
+	}
 }
