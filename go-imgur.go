@@ -13,6 +13,7 @@ import (
 	"time"
 
 	spin "github.com/tj/go-spin"
+	"github.com/whaangbuu/go-loading/loading"
 )
 
 var clientID = getEnvVar()
@@ -50,7 +51,6 @@ type ImageData struct {
 func main() {
 	fileName := os.Args[1]
 	fileEncoded, err := ioutil.ReadFile(fileName)
-	s := spin.New()
 
 	if err != nil {
 		fmt.Println(err)
@@ -59,6 +59,10 @@ func main() {
 	// uploader.NewUpload(fileName)
 
 	parameters := url.Values{"image": {base64.StdEncoding.EncodeToString(fileEncoded)}}
+	loading := loading.StartNew("Uploading, please wait")
+	loading.SetColor("red")
+	loading.SetCharset([]string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠧", "⠇", "⠏"})
+
 	req, err := http.NewRequest("POST", imgur, strings.NewReader(parameters.Encode()))
 	if err != nil {
 		fmt.Println(err)
@@ -67,12 +71,13 @@ func main() {
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Authorization", "Client-ID "+clientID)
 	r, err := http.DefaultClient.Do(req)
+
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	showSpinner(s, "Box1", spin.Box1)
+	loading.Stop()
 
 	var imgurResponse ImgurResponse
 	json.NewDecoder(r.Body).Decode(&imgurResponse)
