@@ -61,7 +61,7 @@ func main() {
 	parameters := url.Values{"image": {base64.StdEncoding.EncodeToString(fileEncoded)}}
 	loading := loading.StartNew("Uploading, please wait")
 	loading.SetColor("red")
-	loading.SetCharset([]string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠧", "⠇", "⠏"})
+	loading.SetLoaders([]string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠧", "⠇", "⠏"})
 
 	req, err := http.NewRequest("POST", imgur, strings.NewReader(parameters.Encode()))
 	if err != nil {
