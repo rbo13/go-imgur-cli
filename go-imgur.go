@@ -82,7 +82,7 @@ func main() {
 	var imgurResponse ImgurResponse
 	json.NewDecoder(r.Body).Decode(&imgurResponse)
 	copyToClipboard(imgurResponse.Data.Link)
-	fmt.Printf("\n`%s` has been copied to clipboard! \n", imgurResponse.Data.Link)
+	fmt.Printf("`%s` has been copied to clipboard! \n", imgurResponse.Data.Link)
 	fmt.Println("Deletion Link: http://imgur.com/delete/" + imgurResponse.Data.Deletehash)
 }
 
