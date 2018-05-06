@@ -4,7 +4,15 @@
 
 Go-IMGUR-CLI is a CLI based uploader to imgur.
 
+### Pre-requisite:
+Set up your IMGUR API Keys:
 
+
+Add this in your `~/.bash_profile`, `~/.profile`:
+
+```
+export PATH='<YOUR_IMGUR_SECRET>'
+```
 
 ### Installation:
 
