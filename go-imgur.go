@@ -10,9 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"time"
 
-	spin "github.com/tj/go-spin"
 	"github.com/whaangbuu/go-loading/loading"
 )
 
@@ -117,13 +115,4 @@ func copyToClipboard(text string) error {
 		return err
 	}
 	return copyCmd.Wait()
-}
-
-func showSpinner(s *spin.Spinner, name, frames string) {
-	s.Set(frames)
-	fmt.Printf("\n\n  %s: %s\n\n", name, frames)
-	for i := 0; i < 30; i++ {
-		fmt.Printf("\r  \033[36mcomputing\033[m %s ", s.Next())
-		time.Sleep(100 * time.Millisecond)
-	}
 }
