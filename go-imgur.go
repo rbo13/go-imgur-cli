@@ -11,7 +11,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/whaangbuu/go-loading/loading"
+	"github.com/whaangbuu/loading"
 )
 
 var clientID = getEnvVar()
