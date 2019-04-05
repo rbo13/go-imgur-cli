@@ -30,12 +30,9 @@ func (imgr *Imgur) Upload(filename string) {
 	if err != nil {
 		return
 	}
-	parameters := url.Values{"image": {base64.StdEncoding.EncodeToString(fileEncoded)}}
-	client, err := client(imgr.apiKey)
 
-	if err != nil {
-		return
-	}
+	parameters := url.Values{"image": {base64.StdEncoding.EncodeToString(fileEncoded)}}
+	client := client(imgr.apiKey)
 
 	req, err := http.NewRequest("POST", imgurUploadURL, strings.NewReader(parameters.Encode()))
 	if err != nil {
@@ -48,7 +45,7 @@ func (imgr *Imgur) Upload(filename string) {
 	client.Do(req)
 }
 
-func client(apiKey string) (*http.Client, error) {
+func client(apiKey string) *http.Client {
 
 	var netTransport = &http.Transport{
 		Dial: (&net.Dialer{
@@ -57,10 +54,8 @@ func client(apiKey string) (*http.Client, error) {
 		TLSHandshakeTimeout: 5 * time.Second,
 	}
 
-	var client = &http.Client{
+	return &http.Client{
 		Timeout:   time.Second * 10,
 		Transport: netTransport,
 	}
-
-	return client, nil
 }
